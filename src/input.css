@@ -1,0 +1,65 @@
+@import "tailwindcss";
+@source "../index.html";
+
+/* Eignx stealth page. Layout: one screen; header, a left-aligned message block centred vertically, footer.
+   The image fills the frame behind a navy scrim, with one slow light sweep. Single dark theme by design. */
+@theme {
+  --color-navy: #172E78;          /* palette: Navy */
+  --color-navy-deep: #0E1B4D;     /* derived from Navy, lower vignette only */
+  --color-indigo-navy: #1F2179;   /* palette: Indigo navy */
+  --color-cobalt: #2D52B8;        /* palette: Cobalt, primary */
+  --color-cobalt-light: #3B5FC0;  /* palette: Cobalt light */
+  --color-azure: #0088F8;         /* palette addition 2026-10-04: logo blue */
+  --color-gold: #C0973B;          /* palette: Gold accent */
+  --color-tint-50: #EEF1FB;       /* palette: lightest tint */
+  --color-tint-200: #BCCAEF;      /* palette: light tint */
+  --color-tint-300: #A3B7E9;      /* palette: tint */
+  --font-display: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@layer base {
+  :root { color-scheme: dark; }
+  html, body { height: 100%; }
+  body {
+    background-color: var(--color-navy);
+    color: var(--color-tint-50);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .hero-scrim {
+    background:
+      linear-gradient(0deg, color-mix(in oklab, var(--color-navy-deep) 88%, transparent) 0%, transparent 34%),
+      linear-gradient(180deg, color-mix(in oklab, var(--color-navy) 80%, transparent) 0%, color-mix(in oklab, var(--color-navy) 72%, transparent) 45%, color-mix(in oklab, var(--color-navy) 90%, transparent) 100%);
+  }
+  @media (min-width: 768px) {
+    .hero-scrim {
+      background:
+        linear-gradient(0deg, color-mix(in oklab, var(--color-navy-deep) 85%, transparent) 0%, transparent 30%),
+        linear-gradient(90deg, color-mix(in oklab, var(--color-navy) 95%, transparent) 0%, color-mix(in oklab, var(--color-navy) 84%, transparent) 34%, color-mix(in oklab, var(--color-navy) 40%, transparent) 70%, color-mix(in oklab, var(--color-navy) 20%, transparent) 100%);
+    }
+  }
+  .light-sweep { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .light-sweep::before {
+    content: "";
+    position: absolute; top: -30%; bottom: -30%; left: 0; width: 34%;
+    background: linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--color-azure) 16%, transparent) 38%, color-mix(in oklab, var(--color-tint-50) 20%, transparent) 50%, color-mix(in oklab, var(--color-azure) 16%, transparent) 62%, transparent 100%);
+    mix-blend-mode: screen;
+    filter: blur(8px);
+    transform: translateX(-130%) skewX(-18deg);
+    animation: light-sweep 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) 1.5s infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .light-sweep::before { animation: none; opacity: 0; }
+  }
+}
+
+@keyframes light-sweep {
+  0% { transform: translateX(-130%) skewX(-18deg); }
+  60%, 100% { transform: translateX(420%) skewX(-18deg); }
+}
